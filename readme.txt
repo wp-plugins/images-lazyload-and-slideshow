@@ -6,16 +6,16 @@ Requires at least: 3.0
 Tested up to: 3.3
 Stable tag: trunk
 
-This plugin contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using prettyPhoto, Tracking Code Setting.
+This plugin contains four gadgets: Customized css for content images, Lazyload content images, Images slideshow effects, Tracking code setting.
 
 == Description ==
 
 This plugin is highly intelligent and useful, it contains four gadgets:
 
 1. Customized css for content images, used to limit the image's max-width or add hover effect.
-2. Image True Lazyload realization, only take effect to images in the content.
-3. Images' Slideshow Effect using prettyPhoto js. 
-4. Tracking Code Setting, no longer worry about missing the code during theme changes.
+2. Images true lazyload realization, only take effect to images in the content.
+3. Images slideshow effects using fancybox, prettyPhoto, fancyzoom. 
+4. Tracking code setting, no longer worry about missing the code during theme changes.
 
 
 == Installation ==
@@ -36,9 +36,9 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Screenshots ==
 
-1. /Screenshot_1_configs.jpg
-2. /Screenshot_2_Effect_prettyPhoto_1.jpg
-2. /Screenshot_3_Effect_prettyPhoto_2.jpg
+1. /screenshot-1.jpg
+2. /screenshot-2.jpg
+3. /screenshot-3.jpg
 
 
 == Changelog ==
