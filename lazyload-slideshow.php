@@ -15,8 +15,6 @@ define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 $support_effects = array(
 	"fancybox",
 	"prettyPhoto",
-	"fancyzoom",
-//	"highslide",
 );
 
 $css_reference = '
