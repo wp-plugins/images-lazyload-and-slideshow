@@ -14,7 +14,7 @@ This plugin is highly intelligent and useful, it contains four gadgets:
 
 1. Customized css for content images, used to limit the image's max-width or add hover effect.
 2. Images true lazyload realization, only take effect to images in the content.
-3. Images slideshow effects using fancybox, prettyPhoto.
+3. Images slideshow effects using FancyBox, prettyPhoto.
 4. Tracking code setting, no longer worry about missing the code during theme changes.
 
 FancyBox and prettyPhoto are all under GPL licence.

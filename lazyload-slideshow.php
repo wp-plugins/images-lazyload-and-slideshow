@@ -2,7 +2,7 @@
 /*
 Plugin Name: Images Lazyload and Slideshow
 Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
-Description: This plugin is highly intelligent and useful, contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using prettyPhoto, Tracking Code Setting.
+Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox and prettyPhoto, Tracking Code Setting.
 Author: Bruno Xu 
 Author URI: http://blog.brunoxu.info/
 Version: 1.0
