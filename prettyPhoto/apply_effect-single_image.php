@@ -3,8 +3,8 @@
 Name: Adapter for prettyPhoto Effect
 Author: Bruno Xu 
 Author URI: http://blog.brunoxu.info/
-Version: 1.0
-Comment: generate two galleries, one has parentA, the other has not.
+Version: single_image
+Comment: single effect.
 */
 
 	add_action('wp_footer', 'lazyload_slideshow_footer_effect');
@@ -22,7 +22,8 @@ jQuery(function($){
 	$("#content img,.content img,.archive img,.post img").each(function(i){
 		_self = $(this);
 
-		if (_self.width()<50 && _self.height()<50) {
+		if ((_self.width() && _self.width()<50)
+				|| (_self.height() && _self.height()<50)) {
 			return;
 		}
 
@@ -39,7 +40,8 @@ jQuery(function($){
 			}
 
 			if (imgsrc) {
-				_self.wrap("<a href=\'"+imgsrc+"\' rel=\'prettyPhoto[2]\'></a>");
+				_self.addClass("slideshow_imgs");
+				_self.wrap("<a href=\'"+imgsrc+"\' rel=\'prettyPhoto\'></a>");
 			}
 		} else {
 			aHref = this.parentNode.href.toLowerCase();
@@ -48,13 +50,15 @@ jQuery(function($){
 				return;
 			}
 
+			$(this).addClass("slideshow_imgs");
+
 			_parentA = $(this.parentNode);
 			rel = _parentA.attr("rel");
 			if (! rel) {
 				rel = "";
 			}
 			if (rel.indexOf("prettyPhoto") != 0) {
-				_parentA.attr("rel","prettyPhoto[1]");
+				_parentA.attr("rel","prettyPhoto");
 			}
 		}
 	});

@@ -3,7 +3,7 @@
 Name: Adapter for prettyPhoto Effect
 Author: Bruno Xu 
 Author URI: http://blog.brunoxu.info/
-Version: 1.01
+Version: one_gallery
 Comment: generate one gallery.
 */
 
@@ -22,7 +22,8 @@ jQuery(function($){
 	$("#content img,.content img,.archive img,.post img").each(function(i){
 		_self = $(this);
 
-		if (_self.width()<50 && _self.height()<50) {
+		if ((_self.width() && _self.width()<50)
+				|| (_self.height() && _self.height()<50)) {
 			return;
 		}
 
@@ -39,6 +40,7 @@ jQuery(function($){
 			}
 
 			if (imgsrc) {
+				_self.addClass("slideshow_imgs");
 				_self.wrap("<a href=\'"+imgsrc+"\' rel=\'prettyPhoto[1]\'></a>");
 			}
 		} else {
@@ -47,6 +49,8 @@ jQuery(function($){
 			if (! b.test(aHref)) {
 				return;
 			}
+
+			$(this).addClass("slideshow_imgs");
 
 			_parentA = $(this.parentNode);
 			rel = _parentA.attr("rel");

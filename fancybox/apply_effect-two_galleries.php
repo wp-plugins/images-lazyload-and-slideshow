@@ -3,8 +3,8 @@
 Name: Adapter for FancyBox Effect
 Author: Bruno Xu 
 Author URI: http://blog.brunoxu.info/
-Version: 1.02
-Comment: single image effect.
+Version: two_galleries
+Comment: generate two galleries, one has parentA, the other has not.
 */
 
 	add_action('wp_footer', 'lazyload_slideshow_footer_effect');
@@ -23,6 +23,11 @@ jQuery(function($){
 	$("#content img,.content img,.archive img,.post img").each(function(i){
 		_self = $(this);
 
+		if ((_self.width() && _self.width()<50)
+				|| (_self.height() && _self.height()<50)) {
+			return;
+		}
+
 		if (! this.parentNode.href) {
 			imgsrc = "";
 
@@ -36,7 +41,8 @@ jQuery(function($){
 			}
 
 			if (imgsrc) {
-				_self.wrap("<a href=\'"+imgsrc+"\' class=\'fancyboxsingle\'></a>");
+				_self.addClass("slideshow_imgs");
+				_self.wrap("<a href=\'"+imgsrc+"\' rel=\'fancygallery2\'></a>");
 			}
 		} else {
 			aHref = this.parentNode.href.toLowerCase();
@@ -45,16 +51,28 @@ jQuery(function($){
 				return;
 			}
 
+			$(this).addClass("slideshow_imgs");
+
 			_parentA = $(this.parentNode);
-			_parentA.addClass("fancyboxsingle");
+			rel = _parentA.attr("rel");
+			if (! rel) {
+				rel = "";
+			}
+			if (rel.indexOf("fancygallery") != 0) {
+				_parentA.attr("rel","fancygallery1");
+			}
 		}
 	});
 
-	$("a.fancyboxsingle").fancybox({
+	$("a[rel^=fancygallery]").fancybox({
 		\'overlayShow\'		: true,
-		\'hideOnContentClick\'		: true,
+		\'hideOnContentClick\'		: false,
 		\'transitionIn\'		: \'elastic\',
-		\'transitionOut\'		: \'elastic\'
+		\'transitionOut\'		: \'elastic\',
+		\'titlePosition\' 	: \'over\',
+		\'titleFormat\'		: function(title, currentArray, currentIndex, currentOpts) {
+			return \'<span id="fancybox-title-over">Image \' + (currentIndex + 1) + \' / \' + currentArray.length + (title.length ? \' &nbsp; \' + title : \'\') + \'</span>\';
+		}
 	});
 });
 </script>

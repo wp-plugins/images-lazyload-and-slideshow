@@ -5,27 +5,36 @@ Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
 Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox and prettyPhoto, Tracking Code Setting.
 Author: Bruno Xu 
 Author URI: http://blog.brunoxu.info/
-Version: 1.0
+Version: 1.1
 */
 
 define('ImagesLS_Name', 'Images Lazyload and Slideshow');
-define('ImagesLS_Version', '1.0');
+define('ImagesLS_Version', '1.1');
 define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 
+$adapter_key = "apply_effect";
+$adapter_connector = "-";
 $support_effects = array(
-	"fancybox",
-	"prettyPhoto",
+	"fancybox"=>array(
+		"adapters"=>array("two_galleries","one_gallery","single_image")
+	),
+	"prettyPhoto"=>array(
+		"adapters"=>array("two_galleries","one_gallery","single_image")
+	),
 );
 
 $css_reference = '
 <style type="text/css">
-#content img,.content img,.archive img,.post img{
-margin-top:3px;
-max-width:600px;
-<!--[if IE 6]>
-_width:expression(this.width>600?"600px":"auto");
-<![endif]-->
+/* maxwidth limit for content images */
+#content img,.content img,.archive img,.post img {
+margin-top:3px;max-width:600px;
+<!--[if IE 6]>_width:expression(this.width>600?"600px":"auto");<![endif]-->
 }
+/* style for slideshow images */
+.slideshow_imgs {
+cursor:url(http://simplenotestheme.googlecode.com/svn/trunk/autohighslide/highslide/graphics/zoomin.cur), pointer;
+}
+.slideshow_imgs:hover{opacity:0.5;filter:alpha(opacity=50);}
 </style>
 ';
 
@@ -60,12 +69,20 @@ if (! is_admin()) {
 	}
 
 	if ($lazyload_slideshow_vars["effect"]
-			&& in_array($lazyload_slideshow_vars["effect"], $support_effects)) {
-		require_once $lazyload_slideshow_vars["effect"].'/apply_effect.php';
+			&& isset($support_effects[$lazyload_slideshow_vars["effect"]])) {
+		$adapter = "";
+		if (isset($lazyload_slideshow_vars[$lazyload_slideshow_vars["effect"]."-adapter"])
+				&& $lazyload_slideshow_vars[$lazyload_slideshow_vars["effect"]."-adapter"]) {
+			$adapter = $lazyload_slideshow_vars[$lazyload_slideshow_vars["effect"]."-adapter"];
+		} else {
+			$adapter = $support_effects[$lazyload_slideshow_vars["effect"]]["adapters"][0];
+		}
+		require_once $lazyload_slideshow_vars["effect"]."/$adapter_key".($adapter?($adapter_connector.$adapter):"").".php";
 	}
 
-	if ($lazyload_slideshow_vars["lazyload"] || ($lazyload_slideshow_vars["effect"]
-			&& in_array($lazyload_slideshow_vars["effect"], $support_effects))) {
+	if ($lazyload_slideshow_vars["lazyload"]
+			|| ($lazyload_slideshow_vars["effect"]
+					&& isset($support_effects[$lazyload_slideshow_vars["effect"]]))) {
 		add_action('wp_enqueue_scripts', 'lazyload_slideshow_script');
 	}
 
@@ -106,7 +123,8 @@ function lazyload_slideshow_lazyload()
 	add_filter('the_content', 'lazyload_slideshow_content_filter_lazyload');
 
 	function lazyimg_str_handler($matches) {
-		$blank_image_src = get_bloginfo('wpurl') . '/wp-content/plugins/images-lazyload-and-slideshow/blank_image.gif';
+		//$alt_image_src = get_bloginfo('wpurl') . '/wp-content/plugins/images-lazyload-and-slideshow/blank_image.gif';
+		$alt_image_src = get_bloginfo('wpurl') . '/wp-content/plugins/images-lazyload-and-slideshow/loading_2.gif';
 
 		$lazyimg_str = $matches[0];
 
@@ -126,7 +144,7 @@ function lazyload_slideshow_lazyload()
 
 		$lazyimg_str = preg_replace(
 			"/<img([^<>]*)src=['\"]([^<>]*)\.(bmp|gif|jpeg|jpg|png)['\"]([^<>]*)>/i",
-			'<img$1src="'.$blank_image_src.'" file="$2.$3"$4><noscript>'.$matches[0].'</noscript>',
+			'<img$1src="'.$alt_image_src.'" file="$2.$3"$4><noscript>'.$matches[0].'</noscript>',
 			$lazyimg_str
 		);
 
@@ -242,13 +260,16 @@ function lazyload_slideshow_config_page()
 		if (isset($_POST['tracking_code']) && trim($_POST['tracking_code'])) {
 			$tracking_code_post = $_POST['tracking_code'];
 		}
+		
+		$lazyload_slideshow_vars["css"] = $css_post;
+		$lazyload_slideshow_vars["lazyload"] = $lazyload_post;
+		$lazyload_slideshow_vars["effect"] = $effect_post;
+		$lazyload_slideshow_vars["tracking_code"] = $tracking_code_post;
+		if ($effect_post) {
+			$lazyload_slideshow_vars["$effect_post-adapter"] = $_POST["$effect_post-adapter"];
+		}
 
-		update_option(ImagesLS_Config_Name, array(
-			"css" => $css_post,
-			"lazyload" => $lazyload_post,
-			"effect" => $effect_post,
-			"tracking_code" => $tracking_code_post
-		));
+		update_option(ImagesLS_Config_Name, $lazyload_slideshow_vars);
 
 		$lazyload_slideshow_vars = get_option(ImagesLS_Config_Name);
 
@@ -258,7 +279,7 @@ function lazyload_slideshow_config_page()
 	<div class="wrap">
 <style type="text/css">
 dt,dd{padding:5px 3px 0;}
-dt{float:left;width:180px;clear:both;}
+dt{float:left;width:135px;clear:both;}
 dd{float:left;*float:none;*display:inline-block;margin:0;}
 
 .tips{
@@ -293,31 +314,74 @@ border-radius: 3px;
 			<hr/>
 
 			<dl>
-				<dt><strong>CSS For Content Images :</strong></dt>
+				<dt><strong>CSS For Images :</strong></dt>
 				<dd>
-					<textarea name="css" style="width:440px;height:224px;"><?php echo stripslashes($lazyload_slideshow_vars["css"]); ?></textarea>
+					<textarea name="css" style="width:440px;height:271px;"><?php echo stripslashes($lazyload_slideshow_vars["css"]); ?></textarea>
 				</dd>
-				<div style="width:440px;height:224px;float:left;padding:5px 0 0 5px;overflow:hidden;">
+				<div style="width:440px;height:271px;float:left;padding:5px 0 0 5px;overflow:hidden;">
 					<div class="tips"><pre><?php echo "<b>Sample:</b>".htmlentities($css_reference); ?></pre></div>
 				</div>
 			</dl>
+
 			<dl>
 				<dt><strong>Use Lazyload :</strong></dt>
 				<dd>
 					<input type="checkbox" name="lazyload" value="1" <?php if($lazyload_slideshow_vars["lazyload"]) echo 'checked="true"'; ?> />
 				</dd>
 			</dl>
+
 			<dl>
 				<dt><strong>Use Slideshow :</strong></dt>
 				<dd>
-					<select name="effect">
+					<select name="effect" onchange="onChangeEffect(this)">
 						<option value="">Do Not Use</option>
-						<?php foreach($support_effects as $eff): ?>
-							<option value="<?php echo $eff; ?>" <?php if($lazyload_slideshow_vars["effect"]==$eff) echo 'selected="true"'; ?>><?php echo $eff; ?></option>
+						<?php foreach($support_effects as $eff=>$conf): ?>
+							<option value="<?php echo $eff; ?>" <?php if($lazyload_slideshow_vars["effect"]==$eff) echo ' selected="true"'; ?>><?php echo $eff; ?></option>
 						<?php endforeach; ?>
 					</select>
+					<span id="spanAdapterSelect" style="padding: 0 0 0 50px;">
+						Adapters :
+						<?php foreach($support_effects as $effect=>$configs): ?>
+						<select id="<?php echo "select-$effect-adapter"; ?>"
+							name="<?php echo "$effect-adapter"; ?>"
+							<?php if($lazyload_slideshow_vars["effect"]!=$effect) echo ' style="display:none;"'; ?>
+						>
+							<?php foreach($configs["adapters"] as $adapkey=>$adap): ?>
+							<option value="<?php echo $adap; ?>"
+								<?php
+									if(isset($lazyload_slideshow_vars["$effect-adapter"])
+											&& $lazyload_slideshow_vars["$effect-adapter"]
+											&& $lazyload_slideshow_vars["$effect-adapter"]==$adap
+											)
+										echo ' selected="true"';
+								?>
+							>
+								<?php echo $adap; ?>
+							</option>
+							<?php endforeach; ?>
+						</select>
+						<?php endforeach; ?>
+					</span>
 				</dd>
+				<script type="text/javascript">
+				function onChangeEffect(domEffect){
+					adapters = document.getElementById("spanAdapterSelect").children;
+					for (var i=0;i<adapters.length;i++){
+						adapters[i].style.display = "none";
+					}
+					
+					selected_effect = domEffect.value;
+					if (selected_effect) {
+						document.getElementById("spanAdapterSelect").style.display = "";
+						adapter_show = document.getElementById("select-"+selected_effect+"-adapter");
+						adapter_show.style.display = "";
+					} else {
+						document.getElementById("spanAdapterSelect").style.display = "none";
+					}
+				}
+				</script>
 			</dl>
+
 			<dl>
 				<dt><strong>Tracking Code :</strong></dt>
 				<dd>

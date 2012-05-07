@@ -1,4 +1,4 @@
-=== images-lazyload-and-slideshow ===
+=== Images Lazyload and Slideshow ===
 Contributors: xiaoxu125634
 Donate link: http://blog.brunoxu.info/images-lazyload-and-slideshow/
 Tags: Customized css for content images, True Lazyload, Images Slideshow Effect, Images View Effect, Tracking Code Setting
@@ -14,10 +14,14 @@ This plugin is highly intelligent and useful, it contains four gadgets:
 
 1. Customized css for content images, used to limit the image's max-width or add hover effect.
 2. Images true lazyload realization, only take effect to images in the content.
-3. Images slideshow effects using FancyBox, prettyPhoto.
+3. Images slideshow effects.
 4. Tracking code setting, no longer worry about missing the code during theme changes.
 
-FancyBox and prettyPhoto are all under GPL licence.
+Currently Support Effects:
+FancyBox (adapters: two_galleries, one_gallery, single_image)
+prettyPhoto (adapters: two_galleries, one_gallery, single_image)
+
+For licence reason, this plugin only support effects under the GPL licence.
 
 == Installation ==
 
@@ -43,6 +47,13 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 
 == Changelog ==
+
+= 1.1 =
+* 2012-05-08
+* 	upgrade : add adapters for effect, configurable
+* 	upgrade : add special class 'slideshow_imgs' to every effected images
+* 	upgrade : change the blank image to loading gif
+* 	upgrade : setting page style adjust
 
 = 1.0 =
 * 2012-04-23 plugin released.
