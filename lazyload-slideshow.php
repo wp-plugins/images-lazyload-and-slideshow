@@ -53,7 +53,7 @@ if (! $lazyload_slideshow_vars) {
 	$lazyload_slideshow_vars = array(
 		"css" => "",
 		"lazyload" => "1",
-		"effect" => $support_effects[0],
+		"effect" => key($support_effects),
 		"tracking_code" => ""
 	);
 	add_option(ImagesLS_Config_Name, $lazyload_slideshow_vars);
