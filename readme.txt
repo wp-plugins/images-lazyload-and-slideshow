@@ -48,6 +48,10 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Changelog ==
 
+= 1.2.1 =
+* 2012-05-18
+* 	upgrade : optimize effect
+
 = 1.2 =
 * 2012-05-16
 * 	fixbug : css of images' max-width limitation for IE6 may cause browser crash
