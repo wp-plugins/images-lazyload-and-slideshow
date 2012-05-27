@@ -48,6 +48,15 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Changelog ==
 
+= 1.4.1 =
+* 2012-05-29
+* 	upgrade : optimize effect
+
+= 1.4 =
+* 2012-05-29
+* 	upgrade : optimize lazyload, reduce the Performance Loss
+* 	upgrade : optimize limit_width_selector and add_effect_selector, change to "#content img,.content img,.archive img,.post img,.page img"
+
 = 1.3.1 =
 * 2012-05-28
 * 	upgrade : optimize effect

@@ -5,11 +5,11 @@ Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
 Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox and prettyPhoto, Tracking Code Setting.
 Author: Bruno Xu
 Author URI: http://blog.brunoxu.info/
-Version: 1.3
+Version: 1.4
 */
 
 define('ImagesLS_Name', 'Images Lazyload and Slideshow');
-define('ImagesLS_Version', '1.3');
+define('ImagesLS_Version', '1.4');
 define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 
 $adapter_key = "apply_effect";
@@ -23,7 +23,7 @@ $support_effects = array(
 	),
 );
 
-$limit_width_selector = $add_effect_selector = "#content img,.content img,#archive img,.archive img,#post img,.post img,#page img,.page img";
+$limit_width_selector = $add_effect_selector = "#content img,.content img,.archive img,.post img,.page img";
 
 $css_reference = '
 <style type="text/css">
@@ -202,24 +202,28 @@ function lazyload_slideshow_lazyload()
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	function lazyload(){
-		$("img").each(function(){
+		$("img.lh_lazyimg").each(function(){
 			_self = $(this);
-			if (_self.attr("file")
+			if (!_self.attr("lazyloadpass")
+					&& _self.attr("file")
 					&& (!_self.attr("src")
-						|| (_self.attr("src") && _self.attr("file")!=_self.attr("src"))
+							|| (_self.attr("src") && _self.attr("file")!=_self.attr("src"))
 						)
 				) {
 				if((_self.offset().top) < $(window).height()+$(document).scrollTop()
 						&& (_self.offset().left) < $(window).width()+$(document).scrollLeft()
 					) {
 					_self.attr("src",_self.attr("file"));
+					_self.attr("lazyloadpass", "1");
 				}
 			}
 		});
 	}
 	lazyload();
-	$(window).scroll(lazyload);
-	$(window).resize(lazyload);
+
+	var itv;
+	$(window).scroll(function(){clearTimeout(itv);itv=setTimeout(lazyload,500);});
+	$(window).resize(function(){clearTimeout(itv);itv=setTimeout(lazyload,500);});
 });
 </script>
 <!-- lazyload end -->
