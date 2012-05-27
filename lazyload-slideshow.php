@@ -3,13 +3,13 @@
 Plugin Name: Images Lazyload and Slideshow
 Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
 Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox and prettyPhoto, Tracking Code Setting.
-Author: Bruno Xu 
+Author: Bruno Xu
 Author URI: http://blog.brunoxu.info/
-Version: 1.2
+Version: 1.3
 */
 
 define('ImagesLS_Name', 'Images Lazyload and Slideshow');
-define('ImagesLS_Version', '1.2');
+define('ImagesLS_Version', '1.3');
 define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 
 $adapter_key = "apply_effect";
@@ -23,10 +23,12 @@ $support_effects = array(
 	),
 );
 
+$limit_width_selector = $add_effect_selector = "#content img,.content img,#archive img,.archive img,#post img,.post img,#page img,.page img";
+
 $css_reference = '
 <style type="text/css">
 /* maxwidth limit for content images */
-#content img,.content img,.archive img,.post img {
+'.$limit_width_selector.' {
 margin-top:3px;max-width:600px;
 _width:expression(this.width>600?600:auto);
 }
@@ -48,20 +50,38 @@ document.write(unescape("%3Cscript src=\'" + _bdhmProtocol + "hm.baidu.com/h.js%
 </div>
 ';
 
+
 $lazyload_slideshow_vars = get_option(ImagesLS_Config_Name);
 if (! $lazyload_slideshow_vars) {
 	$lazyload_slideshow_vars = array(
 		"css" => "",
 		"lazyload" => "1",
 		"effect" => key($support_effects),
-		"tracking_code" => ""
+		"add_effect_selector" => $add_effect_selector,
+		"tracking_code" => "",
+		"use_footer_or_head" => "wp_footer",
 	);
 	add_option(ImagesLS_Config_Name, $lazyload_slideshow_vars);
+} else {
+	$need_updating = false;
+
+	if (! isset($lazyload_slideshow_vars["add_effect_selector"])) {
+		$lazyload_slideshow_vars["add_effect_selector"] = $add_effect_selector;
+		$need_updating = true;
+	}
+	if (! isset($lazyload_slideshow_vars["use_footer_or_head"])) {
+		$lazyload_slideshow_vars["use_footer_or_head"] = "wp_footer";
+		$need_updating = true;
+	}
+
+	if ($need_updating) {
+		update_option(ImagesLS_Config_Name, $lazyload_slideshow_vars);
+	}
 }
 
 if (! is_admin()) {
 	if ($lazyload_slideshow_vars["css"]) {
-		add_action('wp_footer', 'lazyload_slideshow_footer_css');
+		add_action($lazyload_slideshow_vars["use_footer_or_head"], 'lazyload_slideshow_footer_css');
 	}
 
 	if ($lazyload_slideshow_vars["lazyload"]) {
@@ -87,7 +107,7 @@ if (! is_admin()) {
 	}
 
 	if ($lazyload_slideshow_vars["tracking_code"]) {
-		add_action('wp_footer', 'lazyload_slideshow_footer_tracking_code');
+		add_action($lazyload_slideshow_vars["use_footer_or_head"], 'lazyload_slideshow_footer_tracking_code');
 	}
 } else {
 	add_action('admin_menu','lazyload_slideshow_admin_menu');
@@ -120,6 +140,8 @@ function lazyload_slideshow_footer_css()
 
 function lazyload_slideshow_lazyload()
 {
+	global $lazyload_slideshow_vars;
+
 	add_filter('the_content', 'lazyload_slideshow_content_filter_lazyload');
 
 	function lazyimg_str_handler($matches) {
@@ -163,7 +185,7 @@ function lazyload_slideshow_lazyload()
 	}
 
 
-	add_action('wp_footer', 'lazyload_slideshow_footer_lazyload');
+	add_action($lazyload_slideshow_vars["use_footer_or_head"], 'lazyload_slideshow_footer_lazyload');
 
 	function lazyload_slideshow_footer_lazyload()
 	{
@@ -239,14 +261,17 @@ function lazyload_slideshow_admin_menu()
 // lazyload_slideshow config page
 function lazyload_slideshow_config_page()
 {
-	global $css_reference,$tracking_code_reference,
+	global $add_effect_selector,
+			$css_reference,$tracking_code_reference,
 			$lazyload_slideshow_vars,$support_effects;
 
 	if ($_POST && isset($_POST['op_save'])) {
 		$css_post = "";
 		$lazyload_post = "";
 		$effect_post = "";
+		$add_effect_selector_post = "";
 		$tracking_code_post = "";
+		$use_footer_or_head_post = "";
 
 		if (isset($_POST['css']) && trim($_POST['css'])) {
 			$css_post = trim($_POST['css']);
@@ -257,17 +282,25 @@ function lazyload_slideshow_config_page()
 		if (isset($_POST['effect']) && $_POST['effect']) {
 			$effect_post = $_POST['effect'];
 		}
-		if (isset($_POST['tracking_code']) && trim($_POST['tracking_code'])) {
-			$tracking_code_post = $_POST['tracking_code'];
+		if (isset($_POST['add_effect_selector']) && trim($_POST['add_effect_selector'])) {
+			$add_effect_selector_post = trim($_POST['add_effect_selector']);
 		}
-		
+		if (isset($_POST['tracking_code']) && trim($_POST['tracking_code'])) {
+			$tracking_code_post = trim($_POST['tracking_code']);
+		}
+		if (isset($_POST['use_footer_or_head']) && $_POST['use_footer_or_head']) {
+			$use_footer_or_head_post = $_POST['use_footer_or_head'];
+		}
+
 		$lazyload_slideshow_vars["css"] = $css_post;
 		$lazyload_slideshow_vars["lazyload"] = $lazyload_post;
 		$lazyload_slideshow_vars["effect"] = $effect_post;
-		$lazyload_slideshow_vars["tracking_code"] = $tracking_code_post;
 		if ($effect_post) {
 			$lazyload_slideshow_vars["$effect_post-adapter"] = $_POST["$effect_post-adapter"];
 		}
+		$lazyload_slideshow_vars["add_effect_selector"] = $add_effect_selector_post;
+		$lazyload_slideshow_vars["tracking_code"] = $tracking_code_post;
+		$lazyload_slideshow_vars["use_footer_or_head"] = $use_footer_or_head_post;
 
 		update_option(ImagesLS_Config_Name, $lazyload_slideshow_vars);
 
@@ -278,8 +311,10 @@ function lazyload_slideshow_config_page()
 ?>
 	<div class="wrap">
 <style type="text/css">
-dt,dd{padding:5px 3px 0;}
-dt{float:left;width:135px;clear:both;}
+.wrap{min-width:1080px;_width:1080px;}
+
+dt,dd{padding:15px 3px 0;}
+dt{float:left;width:150px;clear:both;}
 dd{float:left;*float:none;*display:inline-block;margin:0;}
 
 .tips{
@@ -318,7 +353,7 @@ border-radius: 3px;
 				<dd>
 					<textarea name="css" style="width:440px;height:271px;"><?php echo stripslashes($lazyload_slideshow_vars["css"]); ?></textarea>
 				</dd>
-				<div style="width:440px;height:271px;float:left;padding:5px 0 0 5px;overflow:hidden;">
+				<div style="width:440px;height:271px;float:left;padding:15px 0 0 5px;overflow:hidden;">
 					<div class="tips"><pre><?php echo "<b>Sample:</b>".htmlentities($css_reference); ?></pre></div>
 				</div>
 			</dl>
@@ -369,7 +404,7 @@ border-radius: 3px;
 					for (var i=0;i<adapters.length;i++){
 						adapters[i].style.display = "none";
 					}
-					
+
 					selected_effect = domEffect.value;
 					if (selected_effect) {
 						document.getElementById("spanAdapterSelect").style.display = "";
@@ -378,8 +413,26 @@ border-radius: 3px;
 					} else {
 						document.getElementById("spanAdapterSelect").style.display = "none";
 					}
+
+					if (selected_effect) {
+						document.getElementById("dlAddEffectSelector").style.display = "";
+					} else {
+						document.getElementById("dlAddEffectSelector").style.display = "none";
+					}
 				}
 				</script>
+			</dl>
+
+			<dl id="dlAddEffectSelector"<?php if(! $lazyload_slideshow_vars["effect"]) echo ' style="display:none;"'; ?>>
+				<dt><strong>Add Effect Selector :</strong></dt>
+				<dd>
+					<input type="text" name="add_effect_selector"
+						value="<?php echo htmlentities($lazyload_slideshow_vars["add_effect_selector"]); ?>"
+						style="width:800px;"/>
+					<div class="tips">
+						<pre><?php echo "<b>Sample:</b>\n".$add_effect_selector; ?></pre>
+					</div>
+				</dd>
 			</dl>
 
 			<dl>
@@ -387,9 +440,19 @@ border-radius: 3px;
 				<dd>
 					<textarea name="tracking_code" style="width:440px;height:280px;"><?php echo stripslashes($lazyload_slideshow_vars["tracking_code"]); ?></textarea>
 				</dd>
-				<div style="width:440px;height:280px;float:left;padding:5px 0 0 5px;overflow:hidden;">
+				<div style="width:440px;height:280px;float:left;padding:15px 0 0 5px;overflow:hidden;">
 					<div class="tips"><pre><?php echo "<b>Sample:</b>".htmlentities($tracking_code_reference); ?></pre></div>
 				</div>
+			</dl>
+
+			<dl>
+				<dt><strong>Action to Hook :</strong></dt>
+				<dd>
+					<select name="use_footer_or_head">
+						<option value="wp_footer"<?php if ($lazyload_slideshow_vars["use_footer_or_head"]=="wp_footer") echo ' selected="true"'; ?>>wp_footer</option>
+						<option value="wp_head"<?php if ($lazyload_slideshow_vars["use_footer_or_head"]=="wp_head") echo ' selected="true"'; ?>>wp_head</option>
+					</select>
+				</dd>
 			</dl>
 
 			<div style="clear: both;padding-top:10px;"></div>

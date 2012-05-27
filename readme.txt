@@ -48,6 +48,16 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Changelog ==
 
+= 1.3.1 =
+* 2012-05-28
+* 	upgrade : optimize effect
+
+= 1.3 =
+* 2012-05-28
+* 	upgrade : user can customize add-effect-selector
+* 	upgrade : user can choose which action to be hook, wp_footer or wp_head
+* 	upgrade : change style wrap for config page, add min-width
+
 = 1.2.2 =
 * 2012-05-20
 * 	upgrade : optimize effect

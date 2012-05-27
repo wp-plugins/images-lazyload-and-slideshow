@@ -7,11 +7,15 @@ Version: one_gallery
 Comment: generate one gallery with all content images.
 */
 
-	add_action('wp_footer', 'lazyload_slideshow_footer_effect');
+	add_action($lazyload_slideshow_vars["use_footer_or_head"], 'lazyload_slideshow_footer_effect');
 
 	function lazyload_slideshow_footer_effect()
 	{
 		global $lazyload_slideshow_vars;
+
+		if (! $lazyload_slideshow_vars["add_effect_selector"]) {
+			return;
+		}
 
 		print('
 <!-- '.$lazyload_slideshow_vars["effect"].' -->
@@ -20,7 +24,7 @@ Comment: generate one gallery with all content images.
 <link rel="stylesheet" type="text/css" href="'.get_bloginfo('wpurl').'/wp-content/plugins/images-lazyload-and-slideshow/'.$lazyload_slideshow_vars["effect"].'/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <script type="text/javascript">
 jQuery(function($){
-	$("#content img,.content img,.archive img,.post img").each(function(i){
+	$("'.$lazyload_slideshow_vars["add_effect_selector"].'").each(function(i){
 		_self = $(this);
 
 		if ((_self.width() && _self.width()<50)
@@ -51,7 +55,7 @@ jQuery(function($){
 				return;
 			}
 
-			$(this).addClass("slideshow_imgs");
+			_self.addClass("slideshow_imgs");
 
 			_parentA = $(this.parentNode);
 			rel = _parentA.attr("rel");
