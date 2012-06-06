@@ -5,11 +5,11 @@ Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
 Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox and prettyPhoto, Tracking Code Setting.
 Author: Bruno Xu
 Author URI: http://blog.brunoxu.info/
-Version: 1.4
+Version: 2.0
 */
 
 define('ImagesLS_Name', 'Images Lazyload and Slideshow');
-define('ImagesLS_Version', '1.4');
+define('ImagesLS_Version', '2.0');
 define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 
 $adapter_key = "apply_effect";
@@ -24,6 +24,9 @@ $support_effects = array(
 );
 
 $limit_width_selector = $add_effect_selector = "#content img,.content img,.archive img,.post img,.page img";
+
+$is_strict_lazyload = FALSE;
+$is_strict_effect = TRUE;
 
 $css_reference = '
 <style type="text/css">
@@ -50,6 +53,11 @@ document.write(unescape("%3Cscript src=\'" + _bdhmProtocol + "hm.baidu.com/h.js%
 </div>
 ';
 
+
+function get_url($path='')
+{
+	return plugins_url(ltrim($path, '/'), __FILE__);
+}
 
 $lazyload_slideshow_vars = get_option(ImagesLS_Config_Name);
 if (! $lazyload_slideshow_vars) {
@@ -142,11 +150,26 @@ function lazyload_slideshow_lazyload()
 {
 	global $lazyload_slideshow_vars;
 
-	add_filter('the_content', 'lazyload_slideshow_content_filter_lazyload');
+	//init,get_header,wp_head
+	add_action('get_header','lazyload_slideshow_obstart');
+	function lazyload_slideshow_obstart() {
+		ob_start();
+	}
 
-	function lazyimg_str_handler($matches) {
-		//$alt_image_src = get_bloginfo('wpurl') . '/wp-content/plugins/images-lazyload-and-slideshow/blank_image.gif';
-		$alt_image_src = get_bloginfo('wpurl') . '/wp-content/plugins/images-lazyload-and-slideshow/loading_2.gif';
+	//get_footer,wp_footer,shutdown(NG)
+	add_action('wp_footer','lazyload_slideshow_obend');
+	function lazyload_slideshow_obend() {
+		$echo = ob_get_contents(); //获取缓冲区内容
+		ob_clean(); //清楚缓冲区内容，不输出到页面
+		print lazyload_slideshow_content_filter_lazyload($echo); //重新写入的缓冲区
+		ob_end_flush(); //将缓冲区输入到页面，并关闭缓存区
+	}
+
+	function lazyimg_str_handler($matches)
+	{
+		global $is_strict_lazyload;
+
+		$alt_image_src = get_url("blank.gif");
 
 		$lazyimg_str = $matches[0];
 
@@ -164,9 +187,17 @@ function lazyload_slideshow_lazyload()
 			);
 		}
 
+		if ($is_strict_lazyload) {
+			$regexp = "/<img([^<>]*)src=['\"]([^<>'\"]*)\.(bmp|gif|jpeg|jpg|png)([^<>'\"]*)['\"]([^<>]*)>/i";
+			$replace = '<img$1src="'.$alt_image_src.'" file="$2.$3$4"$5><noscript>'.$matches[0].'</noscript>';
+		} else {
+			$regexp = "/<img([^<>]*)src=['\"]([^<>'\"]*)['\"]([^<>]*)>/i";
+			$replace = '<img$1src="'.$alt_image_src.'" file="$2"$3><noscript>'.$matches[0].'</noscript>';
+		}
+
 		$lazyimg_str = preg_replace(
-			"/<img([^<>]*)src=['\"]([^<>]*)\.(bmp|gif|jpeg|jpg|png)['\"]([^<>]*)>/i",
-			'<img$1src="'.$alt_image_src.'" file="$2.$3"$4><noscript>'.$matches[0].'</noscript>',
+			$regexp,
+			$replace,
 			$lazyimg_str
 		);
 
@@ -175,8 +206,16 @@ function lazyload_slideshow_lazyload()
 
 	function lazyload_slideshow_content_filter_lazyload($content)
 	{
+		global $is_strict_lazyload;
+
+		if ($is_strict_lazyload) {
+			$regexp = "/<img([^<>]*)\.(bmp|gif|jpeg|jpg|png)([^<>]*)>/i";
+		} else {
+			$regexp = "/<img([^<>]*)>/i";
+		}
+
 		$content = preg_replace_callback(
-			"/<img([^<>]*)>/i",
+			$regexp,
 			"lazyimg_str_handler",
 			$content
 		);
@@ -189,14 +228,21 @@ function lazyload_slideshow_lazyload()
 
 	function lazyload_slideshow_footer_lazyload()
 	{
+/*
+<!-- lazyload images -->
+<style type="text/css">
+.lh_lazyimg{background:url('.get_url("loading.gif").') no-repeat center center;}
+</style>
+<!-- lazyload images end -->
+*/
 		print('
-<!-- hidden lazyload image -->
+<!-- case nojs, hidden lazyload images -->
 <noscript>
 <style type="text/css">
 .lh_lazyimg{display:none;}
 </style>
 </noscript>
-<!-- hidden lazyload image end -->
+<!-- case nojs, hidden lazyload images end -->
 
 <!-- lazyload -->
 <script type="text/javascript">
@@ -204,7 +250,7 @@ jQuery(document).ready(function($) {
 	function lazyload(){
 		$("img.lh_lazyimg").each(function(){
 			_self = $(this);
-			if (!_self.attr("lazyloadpass")
+			if (_self.attr("lazyloadpass")===undefined
 					&& _self.attr("file")
 					&& (!_self.attr("src")
 							|| (_self.attr("src") && _self.attr("file")!=_self.attr("src"))
@@ -213,8 +259,10 @@ jQuery(document).ready(function($) {
 				if((_self.offset().top) < $(window).height()+$(document).scrollTop()
 						&& (_self.offset().left) < $(window).width()+$(document).scrollLeft()
 					) {
+					_self.css("opacity", 0);
 					_self.attr("src",_self.attr("file"));
 					_self.attr("lazyloadpass", "1");
+					_self.animate({opacity:1}, 500);
 				}
 			}
 		});
@@ -222,8 +270,8 @@ jQuery(document).ready(function($) {
 	lazyload();
 
 	var itv;
-	$(window).scroll(function(){clearTimeout(itv);itv=setTimeout(lazyload,500);});
-	$(window).resize(function(){clearTimeout(itv);itv=setTimeout(lazyload,500);});
+	$(window).scroll(function(){clearTimeout(itv);itv=setTimeout(lazyload,400);});
+	$(window).resize(function(){clearTimeout(itv);itv=setTimeout(lazyload,400);});
 });
 </script>
 <!-- lazyload end -->

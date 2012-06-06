@@ -11,10 +11,16 @@ Comment: generate one gallery.
 
 	function lazyload_slideshow_footer_effect()
 	{
-		global $lazyload_slideshow_vars;
+		global $lazyload_slideshow_vars,$is_strict_effect;
 
 		if (! $lazyload_slideshow_vars["add_effect_selector"]) {
 			return;
+		}
+
+		if ($is_strict_effect) {
+			$regexp = '/.+(\.jpg)|(\.jpeg)|(\.png)|(\.gif)|(\.bmp)/i';
+		} else {
+			$regexp = '/.+/';
 		}
 
 		print('
@@ -48,8 +54,8 @@ jQuery(function($){
 				_self.wrap("<a href=\'"+imgsrc+"\' rel=\'prettyPhoto[1]\'></a>");
 			}
 		} else {
-			aHref = this.parentNode.href.toLowerCase();
-			var b=/(\.jpg$)|(\.jpeg$)|(\.png$)|(\.gif$)|(\.bmp$)/i;
+			aHref = this.parentNode.href;
+			var b='.$regexp.';
 			if (! b.test(aHref)) {
 				return;
 			}

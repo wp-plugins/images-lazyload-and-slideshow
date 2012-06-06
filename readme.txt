@@ -48,6 +48,15 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Changelog ==
 
+= 2.0.1 =
+* 2012-06-06
+* 	upgrade : optimize effect
+
+= 2.0 =
+* 2012-06-06
+* 	upgrade : expand the scope of lazyload. previously only the content images take effect, now all the images work.
+* 	upgrade : expand the scope of slideshow, optimize the regexp check rule for images.
+
 = 1.4.1 =
 * 2012-05-29
 * 	upgrade : optimize effect
