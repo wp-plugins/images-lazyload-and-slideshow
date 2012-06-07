@@ -48,6 +48,15 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Changelog ==
 
+= 2.1.1 =
+* 2012-06-07
+* 	upgrade : optimize effect
+
+= 2.1 =
+* 2012-06-07
+* 	upgrade : for better performance, images with width or height use blank_1x1.gif as placeholder, while images without width and height use blank_250x250.gif as placeholder(except: smilies)
+* 	upgrade : add a loading.gif background to each image, if image's loading is timeout, visitors will understand what happened.
+
 = 2.0.1 =
 * 2012-06-06
 * 	upgrade : optimize effect

@@ -5,11 +5,11 @@ Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
 Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox and prettyPhoto, Tracking Code Setting.
 Author: Bruno Xu
 Author URI: http://blog.brunoxu.info/
-Version: 2.0
+Version: 2.1
 */
 
 define('ImagesLS_Name', 'Images Lazyload and Slideshow');
-define('ImagesLS_Version', '2.0');
+define('ImagesLS_Version', '2.1');
 define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 
 $adapter_key = "apply_effect";
@@ -53,11 +53,12 @@ document.write(unescape("%3Cscript src=\'" + _bdhmProtocol + "hm.baidu.com/h.js%
 </div>
 ';
 
-
-function get_url($path='')
+function lazyload_slideshow_get_url($path='')
 {
 	return plugins_url(ltrim($path, '/'), __FILE__);
 }
+
+
 
 $lazyload_slideshow_vars = get_option(ImagesLS_Config_Name);
 if (! $lazyload_slideshow_vars) {
@@ -169,9 +170,20 @@ function lazyload_slideshow_lazyload()
 	{
 		global $is_strict_lazyload;
 
-		$alt_image_src = get_url("blank.gif");
-
 		$lazyimg_str = $matches[0];
+
+		if (preg_match("/width=/i", $lazyimg_str)
+				|| preg_match("/width:/i", $lazyimg_str)
+				|| preg_match("/height=/i", $lazyimg_str)
+				|| preg_match("/height:/i", $lazyimg_str)) {
+			$alt_image_src = lazyload_slideshow_get_url("blank_1x1.gif");
+		} else {
+			if (preg_match("/\/smilies\//i", $lazyimg_str)) {
+				$alt_image_src = lazyload_slideshow_get_url("blank_1x1.gif");
+			} else {
+				$alt_image_src = lazyload_slideshow_get_url("blank_250x250.gif");
+			}
+		}
 
 		if (stripos($lazyimg_str, "class=") === FALSE) {
 			$lazyimg_str = preg_replace(
@@ -225,17 +237,18 @@ function lazyload_slideshow_lazyload()
 
 
 	add_action($lazyload_slideshow_vars["use_footer_or_head"], 'lazyload_slideshow_footer_lazyload');
-
 	function lazyload_slideshow_footer_lazyload()
 	{
-/*
+		print('
 <!-- lazyload images -->
 <style type="text/css">
-.lh_lazyimg{background:url('.get_url("loading.gif").') no-repeat center center;}
+.lh_lazyimg{
+opacity:0.2;filter:alpha(opacity=20);
+background:url('.lazyload_slideshow_get_url("loading.gif").') no-repeat center center;
+}
 </style>
 <!-- lazyload images end -->
-*/
-		print('
+
 <!-- case nojs, hidden lazyload images -->
 <noscript>
 <style type="text/css">
@@ -259,7 +272,6 @@ jQuery(document).ready(function($) {
 				if((_self.offset().top) < $(window).height()+$(document).scrollTop()
 						&& (_self.offset().left) < $(window).width()+$(document).scrollLeft()
 					) {
-					_self.css("opacity", 0);
 					_self.attr("src",_self.attr("file"));
 					_self.attr("lazyloadpass", "1");
 					_self.animate({opacity:1}, 500);
