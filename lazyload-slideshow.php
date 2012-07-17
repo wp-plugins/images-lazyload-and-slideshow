@@ -5,11 +5,11 @@ Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
 Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox and prettyPhoto, Tracking Code Setting.
 Author: Bruno Xu
 Author URI: http://blog.brunoxu.info/
-Version: 2.1
+Version: 2.2
 */
 
 define('ImagesLS_Name', 'Images Lazyload and Slideshow');
-define('ImagesLS_Version', '2.1');
+define('ImagesLS_Version', '2.2');
 define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 
 $adapter_key = "apply_effect";
@@ -172,6 +172,11 @@ function lazyload_slideshow_lazyload()
 
 		$lazyimg_str = $matches[0];
 
+		//不需要lazyload的情况
+		if (preg_match("/\/plugins\/wp-postratings\//i", $lazyimg_str)) {
+			return $lazyimg_str;
+		}
+
 		if (preg_match("/width=/i", $lazyimg_str)
 				|| preg_match("/width:/i", $lazyimg_str)
 				|| preg_match("/height=/i", $lazyimg_str)
@@ -218,6 +223,10 @@ function lazyload_slideshow_lazyload()
 
 	function lazyload_slideshow_content_filter_lazyload($content)
 	{
+		// Don't lazyload for feeds, previews, mobile
+		if( is_feed() || is_preview() || ( function_exists( 'is_mobile' ) && is_mobile() ) )
+			return $content;
+
 		global $is_strict_lazyload;
 
 		if ($is_strict_lazyload) {

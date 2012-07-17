@@ -48,6 +48,15 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Changelog ==
 
+= 2.2.1 =
+* 2012-07-17
+* 	upgrade : optimize effect
+
+= 2.2 =
+* 2012-07-17
+* 	upgrade : add exception for plugin WP-PostRatings, for displaying reason.
+* 	upgrade : do not lazyload images for feeds, previews, mobile. refer to Lazy Load plugin.
+
 = 2.1.1 =
 * 2012-06-07
 * 	upgrade : optimize effect
