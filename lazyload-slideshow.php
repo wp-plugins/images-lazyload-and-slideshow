@@ -2,14 +2,14 @@
 /*
 Plugin Name: Images Lazyload and Slideshow
 Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
-Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox and prettyPhoto, Tracking Code Setting.
+Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox or prettyPhoto etc, Tracking Code Setting.
 Author: Bruno Xu
 Author URI: http://blog.brunoxu.info/
-Version: 2.2
+Version: 2.3
 */
 
 define('ImagesLS_Name', 'Images Lazyload and Slideshow');
-define('ImagesLS_Version', '2.2');
+define('ImagesLS_Version', '2.3');
 define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 
 $adapter_key = "apply_effect";
@@ -20,6 +20,9 @@ $support_effects = array(
 	),
 	"prettyPhoto"=>array(
 		"adapters"=>array("two_galleries","one_gallery","single_image")
+	),
+	"slimbox2"=>array(
+		"adapters"=>array("one_gallery","single_image")
 	),
 );
 

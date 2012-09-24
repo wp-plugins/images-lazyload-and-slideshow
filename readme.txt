@@ -20,8 +20,9 @@ This plugin is highly intelligent and useful, it contains four gadgets:
 Currently Support Effects:
 FancyBox (adapters: two_galleries, one_gallery, single_image)
 prettyPhoto (adapters: two_galleries, one_gallery, single_image)
+slimbox2 (adapters: one_gallery, single_image)
 
-For licence reason, this plugin only support effects under the GPL licence.
+For licence reason, this plugin only support effects under the GPL or MIT licence.
 
 == Installation ==
 
@@ -44,9 +45,18 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 1. /screenshot-1.jpg
 2. /screenshot-2.jpg
 3. /screenshot-3.jpg
+4. /screenshot-4.jpg
 
 
 == Changelog ==
+
+= 2.3.1 =
+* 2012-09-24
+* 	upgrade : optimize effect
+
+= 2.3 =
+* 2012-09-24
+* 	upgrade : add slimbox2 effect, now has two adapters:'one gallery' and 'sigle image'.
 
 = 2.2.1 =
 * 2012-07-17
