@@ -50,6 +50,16 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Changelog ==
 
+= 2.4.1 =
+* 2012-09-26
+* 	upgrade : optimize effect
+
+= 2.4 =
+* 2012-09-26
+* 	upgrade : update the sample css for width limit and slideshow images' cursor style.
+* 	upgrade : add diff feature for lazyload.
+* 	upgrade : update the image's width and height get method.
+
 = 2.3.1 =
 * 2012-09-24
 * 	upgrade : optimize effect

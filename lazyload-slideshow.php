@@ -5,11 +5,11 @@ Plugin URI: http://blog.brunoxu.info/images-lazyload-and-slideshow/
 Description: This plugin is highly intelligent and useful, it contains four gadgets: Customized css for content images, Image True Lazyload realization, Slideshow Effect using FancyBox or prettyPhoto etc, Tracking Code Setting.
 Author: Bruno Xu
 Author URI: http://blog.brunoxu.info/
-Version: 2.3
+Version: 2.4
 */
 
 define('ImagesLS_Name', 'Images Lazyload and Slideshow');
-define('ImagesLS_Version', '2.3');
+define('ImagesLS_Version', '2.4');
 define('ImagesLS_Config_Name', "lazyload_slideshow_config");
 
 $adapter_key = "apply_effect";
@@ -34,15 +34,15 @@ $is_strict_effect = TRUE;
 $css_reference = '
 <style type="text/css">
 /* maxwidth limit for content images */
-'.$limit_width_selector.' {
+'.$limit_width_selector.'{
 margin-top:3px;max-width:600px;
+height:auto !important;
 _width:expression(this.width>600?600:auto);
 }
 /* style for slideshow images */
-.slideshow_imgs {
-cursor:url(http://simplenotestheme.googlecode.com/svn/trunk/autohighslide/highslide/graphics/zoomin.cur), pointer;
-}
-.slideshow_imgs:hover{opacity:0.5;filter:alpha(opacity=50);}
+.slideshow_imgs{cursor:url(http://simplenotestheme.googlecode.com/svn/trunk/autohighslide/highslide/graphics/zoomin.cur), pointer;}
+.slideshow_imgs:hover{opacity:0.5 !important;filter:alpha(opacity=50) !important;}
+#fancybox-wrap{cursor:url(http://simplenotestheme.googlecode.com/svn/trunk/autohighslide/highslide/graphics/zoomout.cur), pointer;}
 </style>
 ';
 
@@ -186,7 +186,10 @@ function lazyload_slideshow_lazyload()
 				|| preg_match("/height:/i", $lazyimg_str)) {
 			$alt_image_src = lazyload_slideshow_get_url("blank_1x1.gif");
 		} else {
-			if (preg_match("/\/smilies\//i", $lazyimg_str)) {
+			if (preg_match("/\/smilies\//i", $lazyimg_str)
+					|| preg_match("/\/smiles\//i", $lazyimg_str)
+					|| preg_match("/\/avatar\//i", $lazyimg_str)
+					|| preg_match("/\/avatars\//i", $lazyimg_str)) {
 				$alt_image_src = lazyload_slideshow_get_url("blank_1x1.gif");
 			} else {
 				$alt_image_src = lazyload_slideshow_get_url("blank_250x250.gif");
@@ -281,12 +284,12 @@ jQuery(document).ready(function($) {
 							|| (_self.attr("src") && _self.attr("file")!=_self.attr("src"))
 						)
 				) {
-				if((_self.offset().top) < $(window).height()+$(document).scrollTop()
-						&& (_self.offset().left) < $(window).width()+$(document).scrollLeft()
+				if((_self.offset().top) < ($(window).height()+$(document).scrollTop()+200)
+						&& (_self.offset().left) < ($(window).width()+$(document).scrollLeft()+200)
 					) {
 					_self.attr("src",_self.attr("file"));
 					_self.attr("lazyloadpass", "1");
-					_self.animate({opacity:1}, 500);
+					_self.animate({opacity:1}, 400);
 				}
 			}
 		});

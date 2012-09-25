@@ -32,11 +32,11 @@ jQuery(function($){
 	$("'.$lazyload_slideshow_vars["add_effect_selector"].'").each(function(i){
 		_self = $(this);
 
-		if ((_self.width() && _self.width()<50)
-				|| (_self.height() && _self.height()<50)) {
-			if (!(_self.width()==1 && _self.height()==1)) {
-				return;
-			}
+		selfWidth = _self.attr("width")?_self.attr("width"):_self.width();
+		selfHeight = _self.attr("height")?_self.attr("height"):_self.height();
+		if ((selfWidth && selfWidth<50)
+				|| (selfHeight && selfHeight<50)) {
+			return;
 		}
 
 		if (! this.parentNode.href) {
