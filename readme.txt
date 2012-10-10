@@ -52,6 +52,10 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 == Changelog ==
 
+= 2.4.2 =
+* 2012-10-10
+* 	fixbug : fix 4.1.13_gallery_js effect's bug.
+
 = 2.4.1 =
 * 2012-09-26
 * 	upgrade : optimize effect
