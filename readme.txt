@@ -1,30 +1,28 @@
 === Images Lazyload and Slideshow ===
 Contributors: xiaoxu125634
-Donate link: http://blog.brunoxu.info/images-lazyload-and-slideshow/
-Tags: Customized css for content images, True Lazyload, Images Slideshow Effect, Images View Effect, Tracking Code Setting
+Donate link: http://www.brunoxu.com/images-lazyload-and-slideshow.html
+Tags: images lazyload, images slideshow effect, images popup view effect
 Requires at least: 3.0
-Tested up to: 3.3
+Tested up to: 3.9.1
 Stable tag: trunk
 
-This plugin contains four gadgets: Customized css for content images, Images True Lazyload realization, Slideshow Effects using FancyBox or prettyPhoto etc, Tracking Code Setting.
+This plugin is used to lazyload images on entire page, add popup view effect, slideshow effect to images.
 
 == Description ==
 
-This plugin is highly intelligent and useful, it contains four gadgets:
+This plugin is mainly use for:
 
-1. Customized css for content images, used to limit the image's max-width or add hover effect.
-2. Images True Lazyload realization, all images on the web page will be lazyloaded.
-3. Images slideshow effects.
-4. Tracking code setting, no longer worry about missing the code during theme changes.
+1. images lazyload realization on entire page.
+2. popup view effect, slideshow effect for images.
+3. custom html setting, such as custom css for images and tracking codes etc.
 
-The four gadgets are all independent of each other, and can be enable and disabled separately.
+These functions are all independent of each other, you can use them separately as you need.
 
-Currently Support Effects:
-FancyBox (adapters: two_galleries, one_gallery, single_image)
-prettyPhoto (adapters: two_galleries, one_gallery, single_image)
-slimbox2 (adapters: one_gallery, single_image)
+Effects and adapters are easily to install and delete. You can install new effects or delete unuseful effects freely.
 
-For licence reason, this plugin only support effects under the GPL or MIT licence.
+Native support effects: fancybox, prettyPhoto and slimbox2
+
+Get more effects, please visit <a href="http://www.brunoxu.com/effects-for-images-lazyload-and-slideshow.html" target="_blank">http://www.brunoxu.com/effects-for-images-lazyload-and-slideshow.html</a>
 
 == Installation ==
 
@@ -39,7 +37,7 @@ e.g.
 
 == Frequently Asked Questions ==
 
-If there's any problem, Leave messages to me in page http://blog.brunoxu.info/images-lazyload-and-slideshow/
+If there's any question, leave a messages to me on page http://www.brunoxu.com/images-lazyload-and-slideshow.html
 
 
 == Screenshots ==
@@ -51,6 +49,17 @@ If there's any problem, Leave messages to me in page http://blog.brunoxu.info/im
 
 
 == Changelog ==
+
+= 3.0 =
+* 2014-06-19
+* 	upgrade : upgrade effect and adapter interface, easily to add, delete and develop.
+* 	upgrade : every effect added into system as a plugin, easily to install or delete on the backend.
+* 	upgrade : optimize lazyload script, not to load images far from current screen above.
+* 	upgrade : combine "custom css" and "tracking code" into "custom html".
+* 	upgrade : add lazyload scope config, all images or images in post content for choice.
+* 	upgrade : optimize display of config page, define width in percentage.
+* 	upgrade : change links of plugin homepage and author homepage.
+* 	upgrade : upgrade slimbox2 version from 2.04 to 2.05
 
 = 2.4.2 =
 * 2012-10-10
