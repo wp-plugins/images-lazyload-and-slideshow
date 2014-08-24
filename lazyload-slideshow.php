@@ -2,14 +2,15 @@
 /*
 Plugin Name: Images Lazyload and Slideshow
 Plugin URI: http://www.brunoxu.com/images-lazyload-and-slideshow.html
-Description: This plugin is used to lazyload images on entire page, add popup view effect, slideshow effect to images.
+Description: Lazy load all images. Add lightbox effect, gallery slideshow effect to custom selected images. Custom html.
 Author: Bruno Xu
 Author URI: http://www.brunoxu.com/
-Version: 3.0
+Version: 3.1
+License: GPL
 */
 
 define('Lazyload_Slideshow_Name', 'Images Lazyload and Slideshow');
-define('Lazyload_Slideshow_Version', '3.0');
+define('Lazyload_Slideshow_Version', '3.1');
 define('Lazyload_Slideshow_Config_Effect', "lazyload_slideshow_effects");
 define('Lazyload_Slideshow_Config_Content', "lazyload_slideshow_config");
 
@@ -626,24 +627,17 @@ if (! is_admin()) {
 		$lazyload_applyed = TRUE;
 
 		if ($config["lazyload_all"]) {
-			add_action('get_header','lazyload_slideshow_obstart');//init,get_header,wp_head
-			function lazyload_slideshow_obstart() {
-				ob_start();
+			add_action('get_header','lazyload_slideshow_lazyload_obstart');//init,get_header,wp_head
+			function lazyload_slideshow_lazyload_obstart() {
+				ob_start('lazyload_slideshow_lazyload_obend');
 			}
-
-			$priority = 10;
-			add_action('wp_footer','lazyload_slideshow_obend',$priority);//get_footer,wp_footer,shutdown(NG)
-			function lazyload_slideshow_obend() {
-				$echo = ob_get_contents(); //get the content of output buffer without clearing it.
-				ob_clean(); //clean the buffer by the way of discarding and return nothing.
-				print lazyload_slideshow_content_filter_lazyload($echo); //write to buffer again
-				ob_end_flush(); //clean the buffer by the way of destroying and return true or false depend on success or not.
+			function lazyload_slideshow_lazyload_obend($content) {
+				return lazyload_slideshow_lazyload_content_filter($content);
 			}
 		} else {
-			add_filter('the_content', 'lazyload_slideshow_content_filter_lazyload');
+			add_filter('the_content', 'lazyload_slideshow_lazyload_content_filter');
 		}
-
-		function lazyload_slideshow_content_filter_lazyload($content)
+		function lazyload_slideshow_lazyload_content_filter($content)
 		{
 			// Don't lazyload for feeds, previews
 			if( is_feed() || is_preview() ) {

@@ -1,26 +1,26 @@
 === Images Lazyload and Slideshow ===
 Contributors: xiaoxu125634
 Donate link: http://www.brunoxu.com/images-lazyload-and-slideshow.html
-Tags: images lazyload, images slideshow effect, images popup view effect
+Tags: lazy load, lazyload, images lazy load, images, lazy loading, lightbox, images gallery, images slideshow, gallery slideshow, custom html, fancybox, prettyPhoto, slimbox2
 Requires at least: 3.0
-Tested up to: 3.9.1
+Tested up to: 3.9.2
 Stable tag: trunk
 
-This plugin is used to lazyload images on entire page, add popup view effect, slideshow effect to images.
+Lazy load all images. Add lightbox effect, gallery slideshow effect to custom selected images. Custom html.
 
 == Description ==
 
-This plugin is mainly use for:
+This plugin is mainly used for:
 
-1. images lazyload realization on entire page.
-2. popup view effect, slideshow effect for images.
-3. custom html setting, such as custom css for images and tracking codes etc.
+1. Lazy load all images in entire site.
+2. Add lightbox effect, gallery slideshow effect to custom selected images.
+3. Custom html setting, you cant save htmls such as custom css for images and tracking codes etc.
 
 These functions are all independent of each other, you can use them separately as you need.
 
-Effects and adapters are easily to install and delete. You can install new effects or delete unuseful effects freely.
+There're three native effects in this plugin: fancybox, prettyPhoto and slimbox2.
 
-Native support effects: fancybox, prettyPhoto and slimbox2
+Also you can install new effects or delete unuseful effects freely.
 
 Get more effects, please visit <a href="http://www.brunoxu.com/effects-for-images-lazyload-and-slideshow.html" target="_blank">http://www.brunoxu.com/effects-for-images-lazyload-and-slideshow.html</a>
 
@@ -49,6 +49,11 @@ If there's any question, leave a messages to me on page http://www.brunoxu.com/i
 
 
 == Changelog ==
+
+= 3.1 =
+* 2014-08-25
+* 	upgrade : optimize lazyload realization codes.
+* 	upgrade : optimize description and tags.
 
 = 3.0 =
 * 2014-06-19
