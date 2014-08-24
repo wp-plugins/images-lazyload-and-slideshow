@@ -5,12 +5,12 @@ Plugin URI: http://www.brunoxu.com/images-lazyload-and-slideshow.html
 Description: Lazy load all images. Add lightbox effect, gallery slideshow effect to custom selected images. Custom html.
 Author: Bruno Xu
 Author URI: http://www.brunoxu.com/
-Version: 3.1
+Version: 3.1.1
 License: GPL
 */
 
 define('Lazyload_Slideshow_Name', 'Images Lazyload and Slideshow');
-define('Lazyload_Slideshow_Version', '3.1');
+define('Lazyload_Slideshow_Version', '3.1.1');
 define('Lazyload_Slideshow_Config_Effect', "lazyload_slideshow_effects");
 define('Lazyload_Slideshow_Config_Content', "lazyload_slideshow_config");
 
@@ -781,7 +781,11 @@ $(window).resize(function(){clearTimeout(ls_itv);ls_itv=setTimeout(ls_lazyload,4
 		}
 		$adapter_use = $effect_use['adapters'][$adapter_config];
 
-		require_once $adapter_use['path'];
+		if (file_exists($adapter_use['path'])) {
+			require_once $adapter_use['path'];
+		} else {
+			$slideshow_applyed = FALSE;
+		}
 	}
 	/** slideshow end */
 

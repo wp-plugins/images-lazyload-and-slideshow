@@ -50,6 +50,10 @@ If there's any question, leave a messages to me on page http://www.brunoxu.com/i
 
 == Changelog ==
 
+= 3.1.1 =
+* 2014-08-25
+* 	fixbug : when use extra effect addon, crash after upgrade, fix it.
+
 = 3.1 =
 * 2014-08-25
 * 	upgrade : optimize lazyload realization codes.
