@@ -6,7 +6,8 @@ Description: Lazy load all images. Add lightbox effect, gallery slideshow effect
 Author: Bruno Xu
 Author URI: http://www.brunoxu.com/
 Version: 3.1.1
-License: GPL
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 define('Lazyload_Slideshow_Name', 'Images Lazyload and Slideshow');
