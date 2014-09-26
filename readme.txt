@@ -53,6 +53,7 @@ If there's any question, leave a messages to me on page http://www.brunoxu.com/i
 = 3.2 =
 * 2014-09-27
 * upgrade: optimize process of lazy loading for better performance and comfortable experience.
+* upgrade: fix height when post images use percent width.
 * upgrade: add 'lazyload_slideshow_skip_lazyload' filter, use this you can customize lazy load scope.
 * upgrade: add lazy load switch for images, when an image contains 'skip_lazyload' class or attribute, it will no longer be lazy loaded.
 
