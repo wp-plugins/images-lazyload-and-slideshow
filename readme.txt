@@ -42,10 +42,10 @@ If there's any question, leave a messages to me on page http://www.brunoxu.com/i
 
 == Screenshots ==
 
-1. /screenshot-1.jpg
-2. /screenshot-2.jpg
-3. /screenshot-3.jpg
-4. /screenshot-4.jpg
+1. Setting Page
+2. fancebox effect
+3. prettyPhoto effect
+4. slimbox2 effect
 
 
 == Changelog ==
