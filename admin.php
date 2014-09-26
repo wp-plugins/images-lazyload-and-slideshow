@@ -2,8 +2,10 @@
 
 add_filter('plugin_action_links', 'lazyload_slideshow_add_settings_link', 10, 2);
 function lazyload_slideshow_add_settings_link($links, $file) {
+	global $plugin_basename;
+
 	static $this_plugin;
-	if (!$this_plugin) $this_plugin = plugin_basename(__FILE__);
+	if (!$this_plugin) $this_plugin = $plugin_basename;
 
 	if ($file == $this_plugin) {
 		$settings_link = '<a href="'.wp_nonce_url("options-general.php?page=images-lazyload-and-slideshow/lazyload-slideshow.php").'">Setting</a>';
