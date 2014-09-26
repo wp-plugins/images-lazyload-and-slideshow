@@ -1,9 +1,5 @@
 <?php if (!defined('ABSPATH')) exit;
 
-if ( is_admin() || in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php')) ) {
-	return;
-}
-
 $available_effects = lazyload_slideshow_get_available_effects();
 $config = lazyload_slideshow_get_config();
 

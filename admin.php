@@ -1,7 +1,5 @@
 <?php if (!defined('ABSPATH')) exit;
 
-if (!is_admin()) return;
-
 add_filter('plugin_action_links', 'lazyload_slideshow_add_settings_link', 10, 2);
 function lazyload_slideshow_add_settings_link($links, $file) {
 	static $this_plugin;

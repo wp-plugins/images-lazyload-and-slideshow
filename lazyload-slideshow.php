@@ -35,8 +35,12 @@ define('Lazyload_Slideshow_Default_Effect', "highslide");
 define('Lazyload_Slideshow_Content_Images_Selector', "#content img,.content img,.archive img,.post img,.page img");
 
 
-require_once 'config.php';
+require_once Lazyload_Slideshow_Plugin_Path.'config.php';
 
-require_once 'admin.php';
+if (is_admin()) {
+	require_once Lazyload_Slideshow_Plugin_Path.'admin.php';
+}
 
-require_once 'front.php';
+if ( !is_admin() && !in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php')) ) {
+	require_once Lazyload_Slideshow_Plugin_Path.'front.php';
+}
