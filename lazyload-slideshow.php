@@ -39,6 +39,7 @@ require_once Lazyload_Slideshow_Plugin_Path.'config.php';
 
 if (is_admin()) {
 	$plugin_basename = plugin_basename(__FILE__);
+	$main_entrance = __FILE__;
 	require_once Lazyload_Slideshow_Plugin_Path.'admin.php';
 }
 

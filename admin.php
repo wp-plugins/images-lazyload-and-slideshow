@@ -17,11 +17,12 @@ function lazyload_slideshow_add_settings_link($links, $file) {
 add_action('admin_menu','lazyload_slideshow_admin_menu');
 function lazyload_slideshow_admin_menu()
 {
+	global $main_entrance;
 	add_options_page(
 		Lazyload_Slideshow_Name.' Setting',
 		Lazyload_Slideshow_Name,
 		8,
-		__FILE__,
+		$main_entrance,
 		'lazyload_slideshow_config_page'
 	);
 }
