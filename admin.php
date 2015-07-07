@@ -21,7 +21,7 @@ function lazyload_slideshow_admin_menu()
 	add_options_page(
 		Lazyload_Slideshow_Name.' Setting',
 		Lazyload_Slideshow_Name,
-		8,
+		'manage_options',
 		$main_entrance,
 		'lazyload_slideshow_config_page'
 	);

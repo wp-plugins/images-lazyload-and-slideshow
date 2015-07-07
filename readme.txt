@@ -3,14 +3,14 @@ Contributors: xiaoxu125634
 Donate link: http://www.brunoxu.com/images-lazyload-and-slideshow.html
 Tags: lazy load, lazyload, images lazy load, images, lazy loading, lightbox, images gallery, images slideshow, gallery slideshow, custom html, fancybox, prettyPhoto, slimbox2
 Requires at least: 3.0
-Tested up to: 4.1.1
+Tested up to: 4.2.2
 Stable tag: trunk
 
 Lazy load all images. Add lightbox effect, gallery slideshow effect to custom selected images. Custom html.
 
 == Description ==
 
-2014.12.18  Updated version of this plugin: [Images Lazyload and Lightbox](https://github.com/xiaoxu125634/Images-Lazyload-and-Lightbox)
+Related project recommend: [Images Lazyload and Lightbox](https://github.com/xiaoxu125634/Images-Lazyload-and-Lightbox)
 
 This plugin is mainly used for:
 
@@ -51,6 +51,13 @@ If there's any question, leave a messages to me on page http://www.brunoxu.com/i
 
 
 == Changelog ==
+
+= 3.3 =
+* 2015-07-07
+* fixbug: change admin_menu's capability from '8' to 'manage_options'.
+* upgrade: replace effect 'prettyPhoto 3.1.4' with 'prettyPhoto 3.1.6'.
+* upgrade: optimize lazyload process.
+* upgrade: disable slideshow effect while wp_is_mobile() is true.
 
 = 3.2 =
 * 2014-09-27

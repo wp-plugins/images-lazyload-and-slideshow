@@ -1,6 +1,6 @@
 <?php if (!defined('ABSPATH')) exit;
 
-function lazyload_slideshow_get_available_effects()
+function lazyload_slideshow_get_available_effects($force_reload=false)
 {
 	$available_effects = array();
 
@@ -9,7 +9,7 @@ function lazyload_slideshow_get_available_effects()
 	$need_save = FALSE;
 
 	// if effects is empty, reload effects
-	if (empty($effects)) {
+	if (empty($effects) || $force_reload) {
 		$need_handle = TRUE;
 		$need_save = TRUE;
 
@@ -131,6 +131,17 @@ function lazyload_slideshow_get_config()
 			}
 
 			$config = $config_tmp;
+		} elseif ($config['plugin_version'] != Lazyload_Slideshow_Version) {
+			if (Lazyload_Slideshow_Version == '3.3') {
+				lazyload_slideshow_get_available_effects(true);
+
+				if ($config['effect'] == 'prettyPhoto 3.1.4') {
+					$config['effect'] = 'prettyPhoto 3.1.6';
+					$config[md5('prettyPhoto 3.1.6').'-adapter'] = $config[md5('prettyPhoto 3.1.4').'-adapter'];
+				}
+			}
+			$config['plugin_version'] = Lazyload_Slideshow_Version;
+			$need_save = TRUE;
 		}
 	}
 
